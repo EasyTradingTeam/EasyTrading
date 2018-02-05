@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>EasyTrading-行情</title>
+<style>
+</style>
+
+<script >
+
+var socketAddr = "ws://localhost:9999/websocket";
+var websocket = new WebSocket(socketAddr);
+
+var request = {};
+request._reqId = 0; 
+request.isConnected = false; 
+request.isLogined = false; 
+request._callbacks = {}; 
+request.send = function(method, params, callback){
+	var reqId = ++request._reqId ;
+    var reqObj = {
+        "handle":method,
+        "params":params,
+        "reqId": reqId
+    };
+	var json = JSON.stringify(reqObj);
+	setMessageInnerHTML('执行请求 #'+reqId+' : '+ json);
+	if(!request.isConnected) {
+		setMessageInnerHTML('websocket 未连接');
+		return ;
+	}
+	websocket.send(json);
+	request._callbacks[reqId] = callback;
+};
+
+request.sendHeartBeat = function(){
+    setInterval(function(){
+		if(request.isConnected) {  
+			websocket.send('');  
+		}
+	} , 1000*60*1);
+};
+
+var response = {};
+response.frontConnected = function() {
+	setMessageInnerHTML("前置机连接成功"); 
+};
+
+websocket.onerror = function () {//连接发生错误的回调方法
+    setMessageInnerHTML("WebSocket在 : "+socketAddr+" 连接失败，请确定服务端(EasyTrading.exe)正在运行。");
+};
+websocket.onopen = function () { //连接成功建立的回调方法
+    setMessageInnerHTML("WebSocket连接成功");
+    request.isConnected = true;
+    request.sendHeartBeat();
+    request.send('regExchangeFront', {"mdFrontAddr":"tcp://180.168.146.187:10010"});
+};
+websocket.onmessage = function (event) { //接收到消息的回调方法
+	setMessageInnerHTML('收到数据：'+event.data);  
+    var obj = JSON.parse(event.data.trim());
+    if(response[obj.handle]) {
+        response[obj.handle](obj.datas);
+    }else if(request._callbacks[obj.reqId]) {
+		request._callbacks[obj.reqId](obj.datas, obj.err, obj.isLast);
+	}
+	
+};
+websocket.onclose = function () { //连接关闭的回调方法
+    setMessageInnerHTML("WebSocket连接关闭");
+    request.isConnected = false;
+};
+
+
+function setMessageInnerHTML(innerHTML) { //将消息显示在网页上 
+	var node=document.createElement("span");
+	node.innerHTML = innerHTML+'<br />';
+	document.getElementById("message").appendChild(node); 
+}  
+
+
+function subscribed() {
+    request.send('regTick', {"code":document.getElementById('code').value});
+	
+	response.onTick = function(tickData){
+		setMessageInnerHTML("onTick 回调 : "+tickData.instrumentID+" 最新价："+tickData.lastPrice);
+	}
+}
+
+function stop() {
+	websocket.close();
+}
+
+</script>
+</head>
+<body>
+
+订阅代码：<input type="text" id="code" value="i1809" /> 
+<button onclick="subscribed()"> 确定</button>
+<button onclick="stop()"> 停止</button>
+<span style="padding-left: 20px;">请使用360浏览器或谷歌浏览器。QQ群:705091132</span>
+<a style="padding-left: 20px;" href="https://easytradingteam.github.io/EasyTrading/" target="_blank">源码地址</a>
+
+<hr/>  
+<div id="message">正在连接WebSocket服务...<br /> </div>   
+ <script src="https://easytradingteam.github.io/EasyTrading/demoMd.js"  type="application/javascript"></script>
+</body>
+</html>
