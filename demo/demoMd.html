@@ -9,7 +9,7 @@
 <script >
 var websocket = null;
 window.onload=function(){
-	if(!mdSocketAddr) {
+	if(typeof mdSocketAddr === "undefined") {
 		alert('行情服务器获取失败！')
 		return ;
 	}

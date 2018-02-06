@@ -10,9 +10,15 @@
 var response = {};
 var websocket = null;
 window.onload=function(){
-	if(!tradingSocketAddr) {
+	if(typeof tradingSocketAddr === "undefined") {
 		alert('交易服务器获取失败！')
 		return ;
+	}
+	if(typeof userId !== "undefined") {
+		document.getElementById('userId').value = userId;
+	}
+	if(typeof password !== "undefined") {
+		document.getElementById('password').value = password;
 	}
 	websocket = new WebSocket(tradingSocketAddr);
 	websocket.onerror = function () {//连接发生错误的回调方法
@@ -193,8 +199,8 @@ function getFee () {
 </head>
 <body>
 
-模拟账号：<input type="text" id="userId" value="111340" /> 
-模拟密码：<input type="text" id="password" value="111111?" /> 
+模拟账号：<input type="text" id="userId" value="" /> 
+模拟密码：<input type="text" id="password" value="" /> 
 <button onclick="login()"> 登陆</button>
 <button onclick="getMoney()"> 查资金</button>
 <button onclick="getPosition()"> 查持仓</button>
