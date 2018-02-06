@@ -18,9 +18,11 @@
  3、如果您有实盘账户，可以立即实盘操作，需要填写正确的前置机地址以及期货公司编号。![期货公司前置机](https://raw.githubusercontent.com/EasyTradingTeam/EasyTrading/master/doc/前置机地址大全2.txt)。<br>
  
 ## 让我们开始吧：
- 1、在线 ![行情Demo](https://easytradingteam.github.io/EasyTrading/demoMd.html) ![交易Demo](https://easytradingteam.github.io/EasyTrading/demoTrading.html) 或者 ![下载Demo源码](https://raw.githubusercontent.com/EasyTradingTeam/EasyTrading/master/demo/EasyTrading.rar)到本地修改调试。<br>
+ 1、在线 ![行情Demo](https://easytradingteam.github.io/EasyTrading/demoMd.html) 、 ![交易Demo](https://easytradingteam.github.io/EasyTrading/demoTrading.html) 或者 ![下载Demo源码](https://raw.githubusercontent.com/EasyTradingTeam/EasyTrading/master/demo/EasyTrading.rar)到本地修改调试。<br>
  2、如果您不想和别人共享服务器，需要更低的延迟，请加群下载服务端程序。<br>
  3、如果需要更多帮助关注QQ官方群。<br>
+ 哈哈哈啊(https://easytradingteam.github.io/EasyTrading/)
+ 
  
 ## 效果如下：
  行情示例截图：<br>
