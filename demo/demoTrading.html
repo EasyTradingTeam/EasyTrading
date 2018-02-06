@@ -7,8 +7,32 @@
 </style>
 
 <script >
-var socketAddr = "ws://106.15.192.156:8888/websocket";
-var websocket = new WebSocket(socketAddr);
+var response = {};
+window.onload=function(){
+	var websocket = new WebSocket(socketAddr);
+	websocket.onerror = function () {//连接发生错误的回调方法
+	    setMessageInnerHTML("WebSocket在 : "+socketAddr+" 连接失败，请确定服务端(EasyTrading.exe)正在运行。");
+	};
+	websocket.onopen = function () { //连接成功建立的回调方法
+	    setMessageInnerHTML("WebSocket连接成功");
+	    request.isConnected = true;
+	    request.sendHeartBeat();
+	};
+	websocket.onmessage = function (event) { //接收到消息的回调方法
+		setMessageInnerHTML('收到数据：'+event.data);  
+	    var obj = JSON.parse(event.data.trim());
+	    if(response[obj.handle]) {
+	        response[obj.handle](obj.datas);
+	    }else if(request._callbacks[obj.reqId]) {
+			request._callbacks[obj.reqId](obj.datas, obj.err, obj.isLast);
+		}
+		
+	};
+	websocket.onclose = function () { //连接关闭的回调方法
+	    setMessageInnerHTML("WebSocket连接关闭");
+	    request.isConnected = false;
+	};
+}
 
 var request = {};
 request._reqId = 0; 
@@ -31,7 +55,6 @@ request.send = function(method, params, callback){
 	websocket.send(json);
 	request._callbacks[reqId] = callback;
 };
-
 request.sendHeartBeat = function(){
     setInterval(function(){
 		if(request.isConnected) {  
@@ -39,32 +62,6 @@ request.sendHeartBeat = function(){
 		}
 	} , 1000*60*1);
 };
-
-var response = {};
-
-websocket.onerror = function () {//连接发生错误的回调方法
-    setMessageInnerHTML("WebSocket在 : "+socketAddr+" 连接失败，请确定服务端(EasyTrading.exe)正在运行。");
-};
-websocket.onopen = function () { //连接成功建立的回调方法
-    setMessageInnerHTML("WebSocket连接成功");
-    request.isConnected = true;
-    request.sendHeartBeat();
-};
-websocket.onmessage = function (event) { //接收到消息的回调方法
-	setMessageInnerHTML('收到数据：'+event.data);  
-    var obj = JSON.parse(event.data.trim());
-    if(response[obj.handle]) {
-        response[obj.handle](obj.datas);
-    }else if(request._callbacks[obj.reqId]) {
-		request._callbacks[obj.reqId](obj.datas, obj.err, obj.isLast);
-	}
-	
-};
-websocket.onclose = function () { //连接关闭的回调方法
-    setMessageInnerHTML("WebSocket连接关闭");
-    request.isConnected = false;
-};
-
 
 function getRadioValue (name){
 	var radio = document.getElementsByName(name), value='';  
