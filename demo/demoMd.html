@@ -7,11 +7,15 @@
 </style>
 
 <script >
-
+var websocket = null;
 window.onload=function(){
-	var websocket = new WebSocket(socketAddr);
+	if(!mdSocketAddr) {
+		alert('行情服务器获取失败！')
+		return ;
+	}
+	websocket = new WebSocket(mdSocketAddr);
 	websocket.onerror = function () {//连接发生错误的回调方法
-	    setMessageInnerHTML("WebSocket在 : "+socketAddr+" 连接失败，请确定服务端(EasyTrading.exe)正在运行。");
+	    setMessageInnerHTML("WebSocket在 : "+mdSocketAddr+" 连接失败。");
 	};
 	websocket.onopen = function () { //连接成功建立的回调方法
 	    setMessageInnerHTML("WebSocket连接成功");
