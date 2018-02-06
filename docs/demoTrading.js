@@ -1,1 +1,1 @@
-var socketAddr = "ws://106.15.192.156:8888/websocket";
+var tradingSocketAddr = "ws://106.15.192.156:8888/websocket";
