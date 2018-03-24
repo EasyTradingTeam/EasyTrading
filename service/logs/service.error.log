@@ -1,2 +1,0 @@
-2018-02-11 16:52:31,218 ERROR server.SocketServer - 端口 8888 被占用，请使用其它端口：Address already in use: JVM_Bind
-2018-02-11 16:52:31,218 ERROR server.SocketServer - 端口 9999 被占用，请使用其它端口：Address already in use: JVM_Bind

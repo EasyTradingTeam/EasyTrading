@@ -18,10 +18,10 @@
  3、如果您有实盘账户，可以立即实盘操作，需要填写正确的前置机地址以及期货公司编号。![期货公司前置机](https://raw.githubusercontent.com/EasyTradingTeam/EasyTrading/master/doc/前置机地址大全2.txt)。<br>
  
 ## 让我们开始吧：
- 1、在线 [行情Demo](http://106.15.192.156:9010/demo/md) 、  [交易Demo](http://106.15.192.156:9010/demo/trading) 或者 ![下载Demo源码](https://raw.githubusercontent.com/EasyTradingTeam/EasyTrading/master/demo/demo.rar)到本地修改调试。<br>
- 2、如果您不想和别人共享服务器，需要更低的延迟，请加群下载服务端程序。<br>
- 3、如果需要更多帮助关注QQ官方群。<br>
- 
+ 1、[下载程序](https://raw.githubusercontent.com/EasyTradingTeam/EasyTrading/master/EasyTradingTeam.rar) 并解压缩到当前目录<br>
+ 2、进入目录service 双击 "ctp.2018-02-11.exe" 运行服务端程序。程序会监听交易端口：8888，行情端口：9999（执行 ctp.2018-02-11.exe --help 查看使用方法）。<br>
+ 3、Nodejs Demo 执行方法： 打开dos窗口，进入/demo_nodejs目录。测试行情： node demoMd ，测试交易： node demoTrade ，测试策略：node demoStrategy 。<br>
+ 4、Html5 demo 执行方法：进入/demo_html5 目录，直接用浏览器打开demoMd.html 或  demoTrade.html 即可（推荐使用chrome 或者 360浏览器）。
  
 ## 效果如下：
  行情示例截图：<br>

@@ -1,5 +1,0 @@
-2018-02-11 16:52:31,122  INFO ctp.Main - 正在启动行情服务 127.0.0.1:9999
-2018-02-11 16:52:31,153  INFO ctp.Main - 正在启动交易服务 127.0.0.1:8888
-2018-02-11 16:52:31,153  INFO ctp.Main -  ------------- 初始化完成！ ------------- 
-2018-02-11 16:52:31,218 ERROR server.SocketServer - 端口 8888 被占用，请使用其它端口：Address already in use: JVM_Bind
-2018-02-11 16:52:31,218 ERROR server.SocketServer - 端口 9999 被占用，请使用其它端口：Address already in use: JVM_Bind
