@@ -25,9 +25,9 @@
  
 ## 效果如下：
  行情示例截图：<br>
- ![行情](https://raw.githubusercontent.com/EasyTradingTeam/EasyTrading/master/demo/MdDemo.png)<br><br>
+ ![行情](https://raw.githubusercontent.com/EasyTradingTeam/EasyTrading/master/MdDemo.png)<br><br>
  交易示例截图：<br>
- ![交易](https://raw.githubusercontent.com/EasyTradingTeam/EasyTrading/master/demo/TradeDemo.png)<br><br>
+ ![交易](https://raw.githubusercontent.com/EasyTradingTeam/EasyTrading/master/TradeDemo.png)<br><br>
  
  
 ## BUG反馈：
