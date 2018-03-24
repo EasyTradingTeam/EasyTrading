@@ -1,0 +1,68 @@
+2018-02-02 10:45:50,161  INFO ctp.Main - 正在启动交易服务 127.0.0.1:5896
+2018-02-02 10:45:50,178  INFO ctp.Main - 正在启动行情服务 127.0.0.1:5895
+2018-02-02 10:45:50,178  INFO ctp.Main -  ------------- 初始化完成！ ------------- 
+2018-02-02 10:45:50,183  INFO server.SocketServer - 服务启动成功！ 127.0.0.1: 5896
+2018-02-02 10:45:50,183  INFO server.SocketServer - 服务启动成功！ 127.0.0.1: 5895
+2018-02-02 10:47:12,176  INFO server.MdSocketConnector - md-1# 已连接【行情】服务
+2018-02-02 10:47:12,176  INFO server.QueueSocketConnector - md-1# 正在启动消息队列线程...
+2018-02-02 10:47:12,176  INFO server.SocketConnector - md-1# 正在启动监听请求线程。
+2018-02-02 10:47:12,176  INFO server.TradeSocketConnector - trade-1# 已连接【交易】服务
+2018-02-02 10:47:12,176  INFO server.QueueSocketConnector - trade-1# 正在启动消息队列线程...
+2018-02-02 10:47:12,176  INFO server.SocketConnector - md-1# received ：{"handle":"regExchangeFront","params":{"mdFrontAddr":"tcp://180.169.75.19:41213","tradeFrontAddr":"tcp://180.168.146.187:10001","brokerId":"9999","userId":"080137","password":"111111?","resumeType":"quick"},"reqId":1}
+2018-02-02 10:47:12,192  INFO server.SocketConnector - trade-1# 正在启动监听请求线程。
+2018-02-02 10:47:12,192  INFO server.SocketConnector - trade-1# received ：{"handle":"regExchangeFront","params":{"mdFrontAddr":"tcp://180.169.75.19:41213","tradeFrontAddr":"tcp://180.168.146.187:10001","brokerId":"9999","userId":"080137","password":"111111?","resumeType":"quick"},"reqId":1}
+2018-02-02 10:47:12,407  INFO server.MdSocketConnector - md-1#  正在注册行情前置机 tcp://180.169.75.19:41213 ，流文件路径：./flow/md/dGNwOi8vMTgwLjE2OS43NS4xOTo0MTIxMw==/
+2018-02-02 10:47:12,407  INFO server.TradeSocketConnector - trade-1#  正在注册交易前置机 tcp://180.168.146.187:10001 ，流文件路径：./flow/trade/OTk5OTA4MDEzNzExMTExMT8=/
+2018-02-02 10:47:12,407  INFO Tools.FileTools - 创建文件夹 ./flow/md/dGNwOi8vMTgwLjE2OS43NS4xOTo0MTIxMw==/ : true
+2018-02-02 10:47:12,423  INFO Tools.FileTools - 创建文件夹 ./flow/trade/OTk5OTA4MDEzNzExMTExMT8=/ : true
+2018-02-02 10:47:13,146  INFO server.MdSocketConnector - md-1# 正在连接交易所【行情】前置机: tcp://180.169.75.19:41213
+2018-02-02 10:47:13,278  INFO server.TradeSocketConnector - trade-1# 正在连接交易所【交易】前置机: tcp://180.168.146.187:10001
+2018-02-02 10:47:13,351  INFO spi.MdSPI - md-1# 行情前置机连接成功，正在登录行情服务。 brokerId : 9999 , userId : 080137
+2018-02-02 10:47:13,355  INFO spi.MdSPI - 登录行情服务成功！
+2018-02-02 10:47:13,357  INFO spi.TradeSPI - 交易前置机连接成功！
+2018-02-02 10:47:15,183  INFO server.SocketConnector - trade-1# received ：{"handle":"reqUserLogin","params":{},"reqId":2}
+2018-02-02 10:47:15,183  INFO server.TradeSocketConnector - trade-1#  [reqId:2] 已保存至延时消息队列,队列大小：0 ,执行时间：1517539635183 [trade-1# ]
+2018-02-02 10:47:15,183  INFO server.TradeSocketConnector - trade-1# 取出延时消息成功! [reqUserLogin#2]
+2018-02-02 10:47:15,214  INFO spi.TradeSPI - trade-1# traderApi::reqUserLogin 请求登录, brokerId:9999 userId:080137 #reqId:2
+2018-02-02 10:47:15,283  INFO spi.TradeSPI - traderApi::onRspUserLogin 登录成功！
+2018-02-02 10:47:17,485  INFO spi.TradeSPI - 用户： 080137 确认结算结果成功！
+2018-02-02 10:47:17,485  INFO spi.TradeSPI - 上次合约更新时间为：，当前交易日为：20180202，需要重新更新。
+2018-02-02 10:47:17,485  INFO spi.TradeSPI - 正在更新所有合约 
+2018-02-02 10:47:20,006  INFO spi.TradeSPI - 用户 080137 登录成功，并成功更新合约数:516条
+2018-02-02 10:47:20,021  INFO server.SocketConnector - trade-1# received ：{"handle":"reqQryOrder","params":{},"reqId":3}
+2018-02-02 10:47:20,021  INFO server.TradeSocketConnector - trade-1#  [reqId:3] 已保存至延时消息队列,队列大小：0 ,执行时间：1517539640021 [trade-1# ]
+2018-02-02 10:47:20,021  INFO server.TradeSocketConnector - trade-1# 取出延时消息成功! [reqQryOrder#3]
+2018-02-02 10:47:20,389  INFO server.SocketConnector - trade-1# received ：{"handle":"reqQryInvestorPositionDetail","params":{},"reqId":4}
+2018-02-02 10:47:20,389  INFO server.TradeSocketConnector - trade-1#  [reqId:4] 已保存至延时消息队列,队列大小：0 ,执行时间：1517539641021 [trade-1# ]
+2018-02-02 10:47:21,038  INFO server.TradeSocketConnector - trade-1# 取出延时消息成功! [reqQryInvestorPositionDetail#4]
+2018-02-02 10:47:21,190  INFO server.SocketConnector - trade-1# received ：{"handle":"reqQryTradingAccount","params":{},"reqId":5}
+2018-02-02 10:47:21,190  INFO server.TradeSocketConnector - trade-1#  [reqId:5] 已保存至延时消息队列,队列大小：0 ,执行时间：1517539642021 [trade-1# ]
+2018-02-02 10:47:22,041  INFO server.TradeSocketConnector - trade-1# 取出延时消息成功! [reqQryTradingAccount#5]
+2018-02-02 10:47:22,445  INFO server.SocketConnector - md-1# received ：{"handle":"regTick","params":{"code":"cu1805,cu1803"},"reqId":2}
+2018-02-02 10:47:22,461  INFO spi.MdSPI - 正在订阅：cu1805
+2018-02-02 10:47:22,461  INFO spi.MdSPI - 正在订阅：cu1803
+2018-02-02 10:47:22,508  INFO spi.MdSPI - 订阅: cu1805 成功！
+2018-02-02 10:47:22,577  INFO spi.MdSPI - 订阅: cu1803 成功！
+2018-02-02 10:58:55,183 ERROR server.SocketConnector - md-1# 主动断开连接  
+2018-02-02 10:58:55,183 ERROR server.SocketConnector - trade-1# 主动断开连接  
+2018-02-02 10:58:55,183  INFO server.SocketConnector - 正在销毁连接：md-1# 
+2018-02-02 10:58:55,199  INFO server.SocketConnector - 正在销毁连接：trade-1# 
+2018-02-02 10:58:55,199  INFO server.SocketConnector - trade-1# 连接已关闭!
+2018-02-02 10:58:55,199  INFO server.SocketConnector - md-1# 连接已关闭!
+2018-02-02 10:58:55,199  INFO server.QueueSocketConnector - trade-1# 消息队列线程退出
+2018-02-02 10:58:55,199  INFO spi.TradeSPI - 用户正在注销：080137
+2018-02-02 10:58:55,199  INFO spi.MdSPI - 正在取消订阅：cu1805
+2018-02-02 10:58:55,199  INFO server.QueueSocketConnector - md-1# 消息队列线程退出
+2018-02-02 10:58:55,199  INFO spi.MdSPI - 正在取消订阅：cu1803
+2018-02-02 10:58:55,199  INFO server.SocketConnector - md-1#  socket连接线程退出
+2018-02-02 10:58:55,252  INFO spi.MdSPI - 取消订阅: cu1805 成功！
+2018-02-02 10:58:55,252  INFO spi.MdSPI - 取消订阅: cu1803 成功！
+2018-02-02 10:58:55,268  INFO spi.TradeSPI - 用户 : 080137 注销成功
+2018-02-02 10:58:55,268  INFO server.SocketConnector - trade-1#  socket 已经销毁或者没有建立，取消发送：{"err":null,"isLast":true,"datas":{"brokerID":"9999","userID":"080137"},"reqId":0}
+2018-02-02 10:58:55,268  INFO spi.TradeSPI - 交易前置机断开连接,nReason: 4097
+2018-02-02 10:58:55,268  INFO server.SocketConnector - trade-1#  socket 已经销毁或者没有建立，取消发送：{"datas":null,"handle":"onFrontDisconnected"}
+2018-02-02 10:58:55,383  INFO spi.TradeSPI - 交易前置机连接成功！
+2018-02-02 10:58:55,383  INFO server.SocketConnector - trade-1#  socket 已经销毁或者没有建立，取消发送：{"datas":null,"handle":"frontConnected"}
+2018-02-02 10:59:00,203  INFO server.SocketConnector - trade-1#  socket连接线程退出
+2018-02-02 10:59:00,203  INFO spi.TradeSPI - trade-1# 已标注为销毁，正在注销CTP API实例
+2018-02-02 10:59:00,219  INFO server.TradeSocketConnector - trade-1#  交易前置机线程退出。

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<title>EasyTrading-交易</title>
+<style>
+span {
+    word-wrap: break-word;
+}
+</style>
+
+<script >
+var response = {};
+var websocket = null;
+// var addr = 'tcp://180.168.146.187:10000';
+var addr = 'tcp://180.168.146.187:10030'; // 7 x 24
+
+window.onload=function(){
+	websocket = new WebSocket('ws://127.0.0.1:8888/websocket');
+	websocket.onerror = function () {//连接发生错误的回调方法
+	    setMessageInnerHTML("WebSocket 连接失败。");
+	};
+	websocket.onopen = function () { //连接成功建立的回调方法
+	    setMessageInnerHTML("WebSocket连接成功");
+	    request.isConnected = true;
+	    request.sendHeartBeat();
+	};
+	websocket.onmessage = function (event) { //接收到消息的回调方法
+		setMessageInnerHTML('收到数据：'+event.data);  
+	    var obj = JSON.parse(event.data.trim());
+	    if(response[obj.handle]) {
+	        response[obj.handle](obj.datas);
+	    }else if(request._callbacks[obj.reqId]) {
+			request._callbacks[obj.reqId](obj.datas, obj.err, obj.isLast);
+		}
+		
+	};
+	websocket.onclose = function () { //连接关闭的回调方法
+	    setMessageInnerHTML("WebSocket连接关闭");
+	    request.isConnected = false;
+	};
+}
+
+var request = {};
+request._reqId = 0; 
+request.isConnected = false; 
+request.isLogined = false; 
+request._callbacks = {}; 
+request.send = function(method, params, callback){
+	var reqId = ++request._reqId ;
+    var reqObj = {
+        "handle":method,
+        "params":params,
+        "reqId": reqId
+    };
+	var json = JSON.stringify(reqObj);
+	setMessageInnerHTML('<br />执行请求 #'+reqId+' : '+ json);
+	if(!request.isConnected) {
+		setMessageInnerHTML('websocket 未连接');
+		return ;
+	}
+	websocket.send(json);
+	request._callbacks[reqId] = callback;
+};
+request.sendHeartBeat = function(){
+    setInterval(function(){
+		if(request.isConnected) {  
+			websocket.send('');  
+		}
+	} , 1000*60*1);
+};
+
+function getRadioValue (name){
+	var radio = document.getElementsByName(name), value='';  
+	for(var i = 0;i<radio.length;i++) {  
+		if(radio[i].checked==true) { value = radio[i].value;   break; }  
+	} 
+	return parseInt(value);
+}
+
+function setMessageInnerHTML(innerHTML) { //将消息显示在网页上 
+	var node=document.createElement("span");
+	node.innerHTML = innerHTML+'<br />';
+	document.getElementById("message").appendChild(node); 
+}  
+
+
+function login() {
+	request.send('regExchangeFront', {
+		tradeFrontAddr : addr, // 10030
+		brokerId:  '9999',
+		userId:  document.getElementById('userId').value,
+		password:  document.getElementById('password').value
+	});
+	response.onFrontConnected = function() {
+		setMessageInnerHTML("前置机连接成功");
+		request.send('reqUserLogin', {}, function(datas, err, isLast){  
+			if(isLast && !err) { 
+				request.isLogined = true; 
+				setMessageInnerHTML("用户登陆成功");
+			}
+		});
+	};
+}
+
+function getMoney(){
+	if(!request.isLogined){ setMessageInnerHTML("用户未登陆"); return ;}
+	request.send('reqQryTradingAccount',{}, function(datas, err, isLast){ 
+		if(isLast && !err) { 
+			setMessageInnerHTML("用户资金更新成功。"); 
+		}
+	});
+}
+
+function getPosition(){
+	if(!request.isLogined){ setMessageInnerHTML("用户未登陆"); return ;}
+	positioins = [];
+	request.send('reqQryInvestorPosition',{}, function(datas, err, isLast){
+		if(datas) {
+			positioins.push(datas);
+		}
+		if(isLast && !err) { 
+			setMessageInnerHTML("用户持仓更新成功。"); 
+		}
+	});
+}
+
+function getPositionDetail(){
+	if(!request.isLogined){ setMessageInnerHTML("用户未登陆"); return ;}
+	positioins = [];
+	request.send('reqQryInvestorPositionDetail',{}, function(datas, err, isLast){
+		if(datas) {
+			positioins.push(datas);
+		}
+		if(isLast && !err) { 
+			setMessageInnerHTML("用户持仓明细更新成功。"); 
+		}
+	});
+}
+
+function getOrders(){
+	if(!request.isLogined){ setMessageInnerHTML("用户未登陆"); return ;}
+	request.send('reqQryOrder',{}, function(datas, err, isLast){
+		if(isLast && !err) { 
+			setMessageInnerHTML("用户挂单更新成功。"); 
+		}
+	});
+}
+
+function logout(){
+	if(!request.isLogined){ setMessageInnerHTML("用户未登陆"); return ;}
+	request.send('reqUserLogout',{}, function(datas, err, isLast){
+		if(isLast && !err) { 
+			request.isLogined = false;
+			setMessageInnerHTML("登出成功。"); 
+		}
+	});
+}
+
+function insertOrder(){
+	if(!request.isLogined){ setMessageInnerHTML("用户未登陆"); return ;}
+	request.send('reqOrderInsert', { 
+		direction : getRadioValue('direction'), // 买卖
+		offsetFlag : getRadioValue('offsetFlag'), // 开平
+		code : document.getElementById('code').value,
+		orderRef : request._reqId, // 报单引用
+		price : document.getElementById('price').value,
+		volume : document.getElementById('volume').value,
+		timeCondition : 3, // 1:立即成交，否则撤销 3:当日有效
+		volumeCondition : 1, // 成交量类型：1:任何数量  2:最小数量 3:全部数量
+	});
+	
+	response.onOrder = function(datas){ 
+		setMessageInnerHTML('onOrder 回调');
+	};
+	
+	response.onTrade = function(datas){ 
+		setMessageInnerHTML('onTrade 回调');
+	};
+	
+	response.onRtnTradeFaild = function(datas){ 
+		setMessageInnerHTML('错误单 回调');
+	};
+}
+
+function cancelOrder(){
+	if(!request.isLogined){ setMessageInnerHTML("用户未登陆"); return ;}
+	request.send('reqOrderAction', {
+		'code' : document.getElementById('code').value,
+		'orderRef' : document.getElementById('orderRef').value, 
+		'actionFlag' : 0,
+	}, function(datas, err, isLast){
+		if(isLast && !err) { 
+			request.isLogined = false;
+			setMessageInnerHTML("撤单成功。"); 
+		}
+	});
+}
+
+function getFee () {
+	if(!request.isLogined){ setMessageInnerHTML("用户未登陆"); return ;}
+	request.send('reqQryInstrumentCommissionRate',{
+		code : document.getElementById('code').value
+	}, function(datas, err, isLast){
+		if(isLast) { 
+			setMessageInnerHTML("手续费查询成功。"); 
+		}
+	});
+}
+
+function cls () {
+	var dom = document.getElementById("message");
+	while(dom.firstChild != null) {
+		dom.removeChild(dom.firstChild);
+	}
+}
+</script>
+</head>
+<body>
+
+模拟账号：<input type="text" id="userId" value="080137" /> 
+模拟密码：<input type="text" id="password" value="111111?" /> 
+<button onclick="login()"> 登陆</button>
+<button onclick="getMoney()"> 查资金</button>
+<button onclick="getPosition()"> 查持仓</button>
+<button onclick="getPositionDetail()"> 查持仓明细</button>
+<button onclick="getOrders()"> 查挂单</button>
+<button onclick="logout()"> 注销</button>
+<a href="http://www.simnow.com.cn/" target="_blank">注册模拟账号</a>
+<span style="padding-left: 20px;">请使用360浏览器或谷歌浏览器。QQ群:705091132</span>
+<a style="padding-left: 20px;" href="https://github.com/EasyTradingTeam/EasyTrading" target="_blank">源码地址</a>
+<br />
+合约：<input type="text" id="code" value="i1809"  size="8" /> 
+<input checked type="radio" name="direction" value="0" />买
+<input type="radio" name="direction" value="1" />卖
+<span style="padding-left: 5px;padding-right: 5px;"> | </span>
+<input checked type="radio" name="offsetFlag" value="0" />开
+<input type="radio" name="offsetFlag" value="1" />平
+<input type="radio" name="offsetFlag" value="3" />平今
+<input type="text" id="volume" value="1" size="5" /> 手,
+价格：<input type="text" id="price" value="" size="8" />
+<button onclick="insertOrder()"> 下单</button>
+<button onclick="getFee()"> 查手续费</button>
+<span style="padding-left: 10px;padding-right: 10px;"> | </span>
+orderRef ：<input type="text" id="orderRef"  size="8" /> 
+<button onclick="cancelOrder()">撤单</button>
+<span style="padding-left: 10px;padding-right: 10px;"> | </span>
+<button onclick="cls()">清除屏幕</button>
+<hr/>  
+<div id="message">正在连接WebSocket服务...<br /> </div>   
+<script src="https://easytradingteam.github.io/EasyTrading/demoTrading.js"  type="application/javascript"></script>
+    
+</body>
+</html>

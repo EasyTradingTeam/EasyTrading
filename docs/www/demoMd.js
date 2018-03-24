@@ -1,0 +1,1 @@
+var mdSocketAddr = "ws://106.15.192.156:9999/websocket";
